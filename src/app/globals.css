@@ -4,9 +4,9 @@
   --fg: #eef1ff;
   --muted: #8a90a8;
   --line: rgba(255, 255, 255, 0.1);
-  --accent: #5af2c8;
+  --accent: #ffb547;
   --accent-2: #7a6cff;
-  --glow: 0 0 40px rgba(90, 242, 200, 0.35);
+  --glow: 0 0 40px rgba(255,181,71, 0.35);
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -91,7 +91,7 @@ button {
 }
 .btn-primary {
   background: var(--accent);
-  color: #02130e;
+  color: #1a1103;
   border-color: var(--accent);
 }
 

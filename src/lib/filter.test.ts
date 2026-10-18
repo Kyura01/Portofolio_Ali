@@ -9,7 +9,13 @@ const make = (id: string, category: Project["category"]): Project => ({
   description: "",
   tags: [],
   image: "",
-  href: "#",
+  role: "",
+  period: "",
+  client: "",
+  stack: [],
+  details: [],
+  gallery: [],
+  status: "",
 });
 
 const list = [make("a", "real"), make("b", "exploration"), make("c", "real")];

@@ -31,7 +31,7 @@ export default function Orb() {
     camera.position.set(0, 0, 6);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const key = new THREE.PointLight(0x5af2c8, 60, 20);
+    const key = new THREE.PointLight(0xffb547, 60, 20);
     key.position.set(3, 3, 4);
     scene.add(key);
     const rim = new THREE.PointLight(0x7a6cff, 50, 20);
@@ -47,7 +47,7 @@ export default function Orb() {
         color: 0x10131c,
         roughness: 0.25,
         metalness: 0.6,
-        emissive: 0x0a2a24,
+        emissive: 0x2a1a06,
         emissiveIntensity: 0.6,
       }),
     );
@@ -57,7 +57,7 @@ export default function Orb() {
     const halo = new THREE.Mesh(
       new THREE.SphereGeometry(1.62, 48, 48),
       new THREE.MeshBasicMaterial({
-        color: 0x5af2c8,
+        color: 0xffb547,
         transparent: true,
         opacity: 0.08,
         side: THREE.BackSide,
@@ -68,7 +68,7 @@ export default function Orb() {
     // face (eyes) rides on the surface and turns toward the cursor
     const face = new THREE.Group();
     body.add(face);
-    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x5af2c8 });
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffb547 });
     const eyeGeo = new THREE.CapsuleGeometry(0.1, 0.34, 8, 16);
     const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
     const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
@@ -134,7 +134,7 @@ export default function Orb() {
       const eyeScale = 1 + excited * 0.35;
       eyeL.scale.set(eyeScale, open * eyeScale, 1);
       eyeR.scale.copy(eyeL.scale);
-      eyeMat.color.setHex(excited ? 0xffffff : 0x5af2c8);
+      eyeMat.color.setHex(excited ? 0xffffff : 0xffb547);
       halo.material.opacity += ((excited ? 0.2 : 0.08) - halo.material.opacity) * 0.1;
 
       renderer.render(scene, camera);
@@ -160,8 +160,8 @@ export default function Orb() {
         <style>{`
           .orb-fallback { width: 100%; aspect-ratio: 1; border-radius: 50%; display: flex; gap: 14%;
             align-items: center; justify-content: center; background: radial-gradient(circle at 30% 30%, #1c2230, #07080d);
-            box-shadow: 0 0 60px rgba(90,242,200,.25); }
-          .orb-fallback i { width: 8%; height: 22%; border-radius: 99px; background: #5af2c8; }
+            box-shadow: 0 0 60px rgba(255,181,71,.25); }
+          .orb-fallback i { width: 8%; height: 22%; border-radius: 99px; background: #ffb547; }
         `}</style>
       </div>
     );

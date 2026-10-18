@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { profile } from "@/data/content";
+import { experience, profile, projects, skills } from "@/data/content";
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 const links = [
-  { href: "#project", label: "Project", count: "06" },
-  { href: "#service", label: "Service", count: "04" },
-  { href: "#experience", label: "Experience", count: "03" },
-  { href: "#certifications", label: "Certifications", count: "01" },
+  { href: "#project", label: "Project", count: pad(projects.length) },
+  { href: "#skills", label: "Skills", count: pad(skills.length) },
+  { href: "#experience", label: "Experience", count: pad(experience.length) },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -23,11 +24,11 @@ export default function Navbar() {
 
   return (
     <header className={`nav ${scrolled ? "nav-scrolled" : ""}`}>
-      <a href="#top" className="nav-logo" data-magnetic aria-label="Beranda">
+      <a href="#top" className="nav-logo" data-magnetic aria-label="Home">
         {profile.name.slice(0, 1)}
         <i />
       </a>
-      <nav className="nav-links" aria-label="Utama">
+      <nav className="nav-links" aria-label="Main">
         {links.map((l) => (
           <a key={l.href} href={l.href}>
             {l.label}
@@ -44,7 +45,7 @@ export default function Navbar() {
           border-bottom: 1px solid transparent; }
         .nav-scrolled { padding: .7rem 3vw; background: rgba(5,6,10,.72); backdrop-filter: blur(14px); border-color: var(--line); }
         .nav-logo { position: relative; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 10px;
-          background: var(--accent); color: #02130e; font-weight: 800; }
+          background: var(--accent); color: #1a1103; font-weight: 800; }
         .nav-logo i { position: absolute; inset: -5px; border-radius: 14px; border: 1px solid var(--accent); opacity: .4; }
         .nav-links { display: flex; gap: 2rem; font-size: .92rem; color: var(--muted); }
         .nav-links a { transition: color .25s; }

@@ -44,6 +44,7 @@ export default function Hero() {
         <div className="hero-copy">
           <p className="mono">{profile.fullName}</p>
           <h2>{profile.role}</h2>
+          <p className="mono hero-sub">{profile.subtitle}</p>
           <p className="hero-tag">{profile.tagline}</p>
           <div className="hero-actions">
             <a href="#contact" className="btn btn-primary" data-magnetic>
@@ -76,6 +77,7 @@ export default function Hero() {
         .hero-clip:hover .hero-letter { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
         .hero-body { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 2rem; }
         .hero-copy h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); letter-spacing: -.03em; margin: .6rem 0; }
+        .hero-sub { color: var(--accent); margin-bottom: .8rem; }
         .hero-tag { color: var(--muted); max-width: 32rem; line-height: 1.6; }
         .hero-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.6rem; }
         .hero-orb { justify-self: end; width: min(34vw, 420px); aspect-ratio: 1; }

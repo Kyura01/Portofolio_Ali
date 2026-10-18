@@ -38,7 +38,7 @@ export default function ParticleBackground() {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
     const mat = new THREE.PointsMaterial({
-      color: 0x8be9d6,
+      color: 0xffd9a0,
       size: 0.07,
       transparent: true,
       opacity: 0.55,

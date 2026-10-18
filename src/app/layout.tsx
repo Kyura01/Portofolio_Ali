@@ -14,13 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portofolio Ali",
-  description: "Portofolio interaktif dengan animasi 3D.",
+  title: "Ahmad Ali Mukti — Software Engineer",
+  description:
+    "Portfolio of Ahmad Ali Mukti: web and mobile developer building backend systems, IoT pipelines and applied AI.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <Effects />
         {children}

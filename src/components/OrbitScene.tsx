@@ -36,8 +36,8 @@ function drawCard(ctx: CanvasRenderingContext2D, p: Project, i: number, img?: HT
   ctx.fillRect(0, 0, W, H);
 
   ctx.font = "600 26px ui-monospace, monospace";
-  ctx.fillStyle = "#5af2c8";
-  ctx.fillText(`0${i + 1} · ${p.category === "real" ? "REAL PROJECT" : "EXPLORATION"}`, 44, H - 112);
+  ctx.fillStyle = "#ffb547";
+  ctx.fillText(`0${i + 1} · ${p.period.toUpperCase()}`, 44, H - 112);
   ctx.font = "700 54px system-ui, sans-serif";
   ctx.fillStyle = "#ffffff";
   const title = p.title.length > 26 ? p.title.slice(0, 25) + "…" : p.title;
@@ -66,7 +66,7 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
-    camera.position.set(0, 0.4, 10);
+    camera.position.set(0, 0, 10); // z is set from the canvas size in resize()
 
     const n = items.length;
     const disposables: { dispose: () => void }[] = [];
@@ -100,7 +100,7 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
       card.userData.index = i;
 
       const glowMat = new THREE.MeshBasicMaterial({
-        color: 0x5af2c8,
+        color: 0xffb547,
         transparent: true,
         opacity: 0,
         depthWrite: false,
@@ -118,13 +118,19 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
 
     let rx = 6.5;
     const rz = 3.2;
+    const TAN = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const FILL = 0.74; // share of the canvas height the front card should occupy
     const resize = () => {
       const w = el.clientWidth;
       const h = el.clientHeight;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
+      // dolly so the front card fills FILL of the canvas height, whatever the canvas size
+      camera.position.z = CARD_H / FILL / (2 * TAN);
       camera.updateProjectionMatrix();
-      rx = THREE.MathUtils.clamp(camera.aspect * 3.9, 3, 7.5); // widen with the viewport
+      // keep the side cards inside the visible width at their depth
+      const halfW = TAN * (camera.position.z + rz) * camera.aspect;
+      rx = THREE.MathUtils.clamp(halfW - CARD_W * 0.95, 3, 7);
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -174,7 +180,7 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
       cards.forEach((card, i) => {
         const s = orbitPosition(i, n, disp, rx, rz);
         const front = (Math.cos(s.angle) + 1) / 2;
-        card.position.set(s.x, 0.45 + Math.sin(t * 1.2 + i) * 0.06, s.z - rz);
+        card.position.set(s.x, Math.sin(t * 1.2 + i) * 0.06, s.z - rz);
         card.rotation.y = -Math.sin(s.angle) * 0.6;
         card.scale.setScalar(s.scale);
         (card.material as THREE.MeshBasicMaterial).opacity = Math.max(0.05, s.opacity);
@@ -183,8 +189,8 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
       });
 
       // cursor parallax
-      camera.position.x += (pointer.x * 0.9 - camera.position.x) * 0.05;
-      camera.position.y += (0.4 + pointer.y * 0.4 - camera.position.y) * 0.05;
+      camera.position.x += (pointer.x * 0.6 - camera.position.x) * 0.05;
+      camera.position.y += (pointer.y * 0.3 - camera.position.y) * 0.05;
       camera.lookAt(0, 0, -rz);
 
       renderer.render(scene, camera);

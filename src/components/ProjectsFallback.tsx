@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { Project } from "@/data/content";
 
 /** 2D swipeable carousel used on mobile, with reduced motion, or when WebGL is unavailable. */
@@ -7,11 +8,11 @@ export default function ProjectsFallback({ items }: { items: Project[] }) {
   return (
     <div className="pf-track">
       {items.map((p, i) => (
-        <a key={p.id} href={p.href} className="pf-card">
+        <Link key={p.id} href={`/projects/${p.id}`} className="pf-card">
           <div className="pf-img" style={{ backgroundImage: `url(${p.image})` }} />
           <div className="pf-body">
             <span className="mono">
-              0{i + 1} · {p.category === "real" ? "Real project" : "Exploration"}
+              0{i + 1} · {p.period}
             </span>
             <h3>{p.title}</h3>
             <p>{p.description}</p>
@@ -23,7 +24,7 @@ export default function ProjectsFallback({ items }: { items: Project[] }) {
               ))}
             </div>
           </div>
-        </a>
+        </Link>
       ))}
       <style>{`
         .pf-track { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 1rem 4vw 2rem;
