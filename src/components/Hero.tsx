@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { profile } from "@/data/content";
@@ -8,9 +8,66 @@ import { useReducedMotion } from "@/lib/useReducedMotion";
 
 const Orb = dynamic(() => import("./Orb"), { ssr: false });
 
+// The big outline name morphs between these. First entry is what shows on load.
+const NAMES = [profile.name, profile.fullName.toUpperCase()];
+const CYCLE_MS = 4200;
+
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
+
+  const [nameIdx, setNameIdx] = useState(0);
+  const idxRef = useRef(0);
+  const busy = useRef(false);
+  const hovering = useRef(false);
+  const swapped = useRef(false); // skip the "letters in" tween on first mount (the intro timeline owns it)
+
+  const letters = () => Array.from(root.current?.querySelectorAll<HTMLElement>(".hero-letter") ?? []);
+
+  /** letters slide up and out, the text swaps, new letters slide in */
+  const morphTo = useCallback((next: number) => {
+    if (busy.current || next === idxRef.current) return;
+    busy.current = true;
+    gsap.to(letters(), {
+      yPercent: -110,
+      opacity: 0,
+      duration: 0.4,
+      stagger: 0.02,
+      ease: "power3.in",
+      onComplete: () => {
+        idxRef.current = next;
+        swapped.current = true;
+        setNameIdx(next);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!swapped.current) return;
+    gsap.fromTo(
+      letters(),
+      { yPercent: 110, opacity: 0 },
+      {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.7,
+        stagger: 0.035,
+        ease: "power4.out",
+        onComplete: () => {
+          busy.current = false;
+        },
+      },
+    );
+  }, [nameIdx]);
+
+  // auto-cycle, paused while the pointer is over the name
+  useEffect(() => {
+    if (reduced) return;
+    const id = window.setInterval(() => {
+      if (!hovering.current) morphTo((idxRef.current + 1) % NAMES.length);
+    }, CYCLE_MS);
+    return () => window.clearInterval(id);
+  }, [reduced, morphTo]);
 
   useEffect(() => {
     if (reduced || !root.current) return;
@@ -32,10 +89,26 @@ export default function Hero() {
 
   return (
     <section id="top" ref={root} className="hero">
-      <h1 className="hero-name" aria-label={profile.name}>
-        {profile.name.split("").map((c, i) => (
-          <span key={i} className="hero-clip" aria-hidden>
-            <span className="hero-letter">{c}</span>
+      <h1
+        className="hero-name"
+        aria-label={profile.fullName}
+        style={{ "--n": NAMES[nameIdx].replace(/\s/g, "").length } as React.CSSProperties}
+        onPointerEnter={() => {
+          hovering.current = true;
+          morphTo(NAMES.length - 1);
+        }}
+        onPointerLeave={() => {
+          hovering.current = false;
+        }}
+        onClick={() => morphTo((idxRef.current + 1) % NAMES.length)}
+      >
+        {NAMES[nameIdx].split(" ").map((word, w) => (
+          <span key={`${nameIdx}-${w}`} className="hero-word" aria-hidden>
+            {word.split("").map((c, i) => (
+              <span key={i} className="hero-clip">
+                <span className="hero-letter">{c}</span>
+              </span>
+            ))}
           </span>
         ))}
       </h1>
@@ -69,8 +142,11 @@ export default function Hero() {
           justify-content: space-between; overflow: hidden; }
         .hero::before { content: ""; position: absolute; width: 60vw; height: 60vw; right: -15vw; top: 10vh;
           background: radial-gradient(circle, rgba(122,108,255,.25), transparent 60%); filter: blur(40px); pointer-events: none; }
-        .hero-name { display: flex; justify-content: center; gap: .02em; font-size: clamp(5rem, 22vw, 20rem);
-          font-weight: 900; line-height: .95; letter-spacing: -.04em; will-change: transform; }
+        .hero-name { display: flex; flex-wrap: wrap; justify-content: center; column-gap: .22em; font-size: clamp(2.6rem, min(22vw, calc(88vw / (var(--n, 3) * .78))), 20rem);
+          font-weight: 900; line-height: .95; letter-spacing: -.04em; will-change: transform; cursor: pointer; }
+        /* reserve the height of the tall "ALI" state so the layout below never jumps while the name morphs */
+        .hero-name { min-height: calc(min(22vw, 20rem) * 1.03); align-content: center; align-items: center; }
+        .hero-word { display: inline-flex; gap: .02em; }
         .hero-clip { display: inline-block; overflow: hidden; padding: .04em .02em; }
         .hero-letter { display: inline-block; color: transparent; -webkit-text-stroke: 1.5px var(--fg);
           transition: color .4s, -webkit-text-stroke-color .4s; }

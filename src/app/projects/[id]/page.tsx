@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -15,8 +16,18 @@ export async function generateMetadata({ params }: PageProps<"/projects/[id]">):
   return { title: `${project.title} — ${profile.fullName}`, description: project.description };
 }
 
-export default async function ProjectPage({ params }: PageProps<"/projects/[id]">) {
-  const { id } = await params;
+export default function ProjectPage({ params }: PageProps<"/projects/[id]">) {
+  // params is runtime data: read it under Suspense so the page shell can be prerendered
+  return (
+    <Suspense fallback={null}>
+      {params.then(({ id }) => (
+        <ProjectDetail id={id} />
+      ))}
+    </Suspense>
+  );
+}
+
+function ProjectDetail({ id }: { id: string }) {
   const index = projects.findIndex((p) => p.id === id);
   if (index === -1) notFound();
 

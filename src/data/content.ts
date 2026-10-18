@@ -37,6 +37,7 @@ export const profile = {
     "I'm an Informatics Engineering student at Institut Teknologi Sumatera who builds end-to-end platforms: web and mobile apps with Laravel, Kotlin and Flutter, smart farming and GIS powered by MQTT. I'm now exploring Artificial Intelligence and computer vision, and I thrive in fast-paced, collaborative environments with active experience in mentoring and organizational leadership.",
   email: "alimukti1140@gmail.com",
   socials: [
+    { label: "GitHub", href: "https://github.com/Kyura01" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/ahmad-ali-mukti/" },
     { label: "Instagram", href: "https://www.instagram.com/ahmadali.m1/" },
     { label: "Email", href: "mailto:alimukti1140@gmail.com" },
