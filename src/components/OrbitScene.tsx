@@ -106,7 +106,7 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
         depthWrite: false,
       });
       disposables.push(glowMat);
-      const glow = new THREE.Mesh(new THREE.PlaneGeometry(CARD_W + 0.2, CARD_H + 0.2), glowMat);
+      const glow = new THREE.Mesh(new THREE.PlaneGeometry(CARD_W + 0.12, CARD_H + 0.12), glowMat);
       disposables.push(glow.geometry);
       glow.position.z = -0.02;
       card.add(glow);
@@ -157,12 +157,12 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
     let disp = targetRef.current;
     let lastActive = -1;
     let raf = 0;
-    const clock = new THREE.Clock();
+    const t0 = performance.now();
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
       if (!visible) return;
-      const t = clock.getElapsedTime();
+      const t = (performance.now() - t0) / 1000;
 
       disp += (targetRef.current - disp) * 0.08;
       const active = THREE.MathUtils.clamp(Math.round(disp), 0, n - 1);
@@ -174,7 +174,7 @@ export default function OrbitScene({ items, targetRef, onActive, onSelect, onFai
       cards.forEach((card, i) => {
         const s = orbitPosition(i, n, disp, rx, rz);
         const front = (Math.cos(s.angle) + 1) / 2;
-        card.position.set(s.x, Math.sin(t * 1.2 + i) * 0.06, s.z - rz);
+        card.position.set(s.x, 0.45 + Math.sin(t * 1.2 + i) * 0.06, s.z - rz);
         card.rotation.y = -Math.sin(s.angle) * 0.6;
         card.scale.setScalar(s.scale);
         (card.material as THREE.MeshBasicMaterial).opacity = Math.max(0.05, s.opacity);

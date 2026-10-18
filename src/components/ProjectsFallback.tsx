@@ -26,7 +26,10 @@ export default function ProjectsFallback({ items }: { items: Project[] }) {
         </a>
       ))}
       <style>{`
-        .pf-track { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 1rem 4vw 2rem; }
+        .pf-track { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 1rem 4vw 2rem;
+          scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+        .pf-track::-webkit-scrollbar { height: 6px; background: transparent; }
+        .pf-track::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 6px; }
         .pf-card { flex: 0 0 min(82vw, 380px); scroll-snap-align: center; border: 1px solid var(--line);
           border-radius: 20px; overflow: hidden; background: var(--bg-2); }
         .pf-img { aspect-ratio: 16/10; background-size: cover; background-position: center; }

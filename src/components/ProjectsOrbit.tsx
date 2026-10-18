@@ -190,6 +190,12 @@ export default function ProjectsOrbit() {
         .proj-progress::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--line); z-index: -1; }
         @keyframes projIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
         .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+        @media (max-height: 760px) {
+          .proj-info { bottom: 3rem; padding: 1rem; gap: .4rem; }
+          .proj-info p, .proj-tags { display: none; }
+          .proj-jump { bottom: 3rem; padding: .7rem; }
+          .proj-jump button { padding: .3rem .5rem; }
+        }
         @media (max-width: 1100px) { .proj-info { width: 20rem; } .proj-jump { display: none; } }
       `}</style>
     </section>

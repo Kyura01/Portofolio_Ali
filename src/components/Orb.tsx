@@ -97,12 +97,12 @@ export default function Orb() {
     let blinkAt = 2;
     let blink = 0;
     let squash = 0;
-    const clock = new THREE.Clock();
+    const t0 = performance.now();
 
     const frame = () => {
       raf = requestAnimationFrame(frame);
       if (!visible) return;
-      const t = clock.getElapsedTime();
+      const t = (performance.now() - t0) / 1000;
       const m = reduced ? 0 : 1;
 
       // follow the cursor
